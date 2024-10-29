@@ -4,6 +4,7 @@ import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class TodoService {
@@ -55,6 +56,10 @@ export class TodoService {
   }
 
   async remove(id: string): Promise<Todo> {
+    const exist = this.findOne(id);
+    if (!exist) {
+      throw new NotFoundError('todo not found ');
+    }
     return this.prisma.todo.delete({
       where: { id },
     });
