@@ -1,0 +1,11 @@
+model Todo {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  description  String?
+  is_completed Boolean   @default(false)
+  completed_at DateTime?
+  user         User      @relation(fields: [user_id], references: [id])
+  user_id      String    @db.ObjectId
+
+  @@index([user_id])
+}
